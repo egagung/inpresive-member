@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Inpresive Member Club — Portal Eksklusif Pelanggan</title>
+  <meta name="theme-color" content="#141210">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="appWrapper">
+
+  <!-- =========================================================
+       1. AUTH SCREEN (LOGIN & REGISTER)
+       ========================================================= -->
+  <div id="authScreen" class="main-content" style="padding-bottom: 30px;">
+    <!-- Logo & Header -->
+    <div style="text-align: center; margin-top: 24px; margin-bottom: 24px;">
+      <div style="width: 52px; height: 52px; background: var(--bg-dark); color: var(--accent); border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 900; border: 2px solid var(--accent); box-shadow: var(--shadow-card); margin-bottom: 12px;">
+        ✂
+      </div>
+      <h1 style="font-size: 22px; font-weight: 900; letter-spacing: 0.04em; color: var(--primary);">INPRESIVE</h1>
+      <p style="font-size: 12px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">
+        Member Club & Rewards
+      </p>
+    </div>
+
+    <!-- Auth Tabs (Login / Register) -->
+    <div style="display: flex; background: #e8e6e1; padding: 4px; border-radius: var(--radius-md); margin-bottom: 20px;">
+      <button id="btnTabAuthLogin" class="btn sm" style="flex: 1; border-radius: 8px; font-weight: 800; background: #ffffff; color: var(--primary); box-shadow: var(--shadow-sm);" onclick="switchAuthMode('LOGIN')">
+        Masuk
+      </button>
+      <button id="btnTabAuthRegister" class="btn sm" style="flex: 1; border-radius: 8px; font-weight: 700; background: transparent; color: var(--text-muted);" onclick="switchAuthMode('REGISTER')">
+        Daftar Baru
+      </button>
+    </div>
+
+    <!-- Form LOGIN -->
+    <div id="formLoginWrap">
+      <div class="card-item" style="padding: 20px;">
+        <h2 style="font-size: 16px; font-weight: 800; margin-bottom: 4px; color: var(--primary);">Selamat Datang</h2>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 18px;">
+          Masuk dengan akun email terdaftar untuk melihat kartu member, saldo poin, dan riwayat potong rambut.
+        </p>
+
+        <form id="formLogin" onsubmit="handleLoginSubmit(event)">
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">Email Terdaftar</label>
+            <input id="loginEmail" type="email" class="form-input" placeholder="contoh: budi@gmail.com" required autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <div class="flex-between" style="margin-bottom: 5px;">
+              <label class="form-label" for="loginPassword" style="margin-bottom: 0;">Password</label>
+            </div>
+            <div style="position: relative;">
+              <input id="loginPassword" type="password" class="form-input" placeholder="Masukkan password Anda" required autocomplete="current-password" style="padding-right: 40px;">
+              <button type="button" onclick="togglePasswordVisibility('loginPassword', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px; color: var(--text-muted);">
+                👁
+              </button>
+            </div>
+          </div>
+
+          <button id="btnLoginSubmit" type="submit" class="btn primary block" style="margin-top: 10px; font-size: 14px; padding: 13px;">
+            Masuk ke Member Club →
+          </button>
+        </form>
+      </div>
+
+      <div style="text-align: center; margin-top: 16px; font-size: 12px; color: var(--text-muted);">
+        Belum punya akun member? <a href="javascript:void(0)" onclick="switchAuthMode('REGISTER')" style="color: var(--accent); font-weight: 750; text-decoration: none;">Daftar gratis di sini</a>
+      </div>
+    </div>
+
+    <!-- Form REGISTER -->
+    <div id="formRegisterWrap" class="hidden">
+      <div class="card-item" style="padding: 20px;">
+        <h2 style="font-size: 16px; font-weight: 800; margin-bottom: 4px; color: var(--primary);">Daftar Member Inpresive</h2>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 18px;">
+          Dapatkan ID Member dan QR digital instan yang dapat digunakan langsung di semua cabang Inpresive!
+        </p>
+
+        <form id="formRegister" onsubmit="handleRegisterSubmit(event)">
+          <div class="form-group">
+            <label class="form-label" for="regName">Nama Lengkap *</label>
+            <input id="regName" type="text" class="form-input" placeholder="Masukkan nama lengkap Anda" required autocomplete="name">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regEmail">Alamat Email *</label>
+            <input id="regEmail" type="email" class="form-input" placeholder="email@contoh.com" required autocomplete="email">
+            <div class="form-hint">Digunakan untuk login dan menerima informasi promo/layanan otomatis.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regPhone">Nomor WhatsApp / HP *</label>
+            <input id="regPhone" type="tel" inputmode="tel" class="form-input" placeholder="Contoh: 081234567890" required autocomplete="tel">
+            <div class="form-hint">Dapat digunakan kasir untuk mencari data member Anda.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regPassword">Buat Password *</label>
+            <div style="position: relative;">
+              <input id="regPassword" type="password" class="form-input" placeholder="Minimal 6 karakter" required minlength="6" autocomplete="new-password" style="padding-right: 40px;">
+              <button type="button" onclick="togglePasswordVisibility('regPassword', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px; color: var(--text-muted);">
+                👁
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regBirthDate">Tanggal Lahir (Opsional)</label>
+            <input id="regBirthDate" type="date" class="form-input">
+            <div class="form-hint">Untuk reward kejutan di hari ulang tahun Anda.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regCity">Kota Domisili (Opsional)</label>
+            <input id="regCity" type="text" class="form-input" placeholder="Contoh: Suwa / Nagano / Jakarta">
+          </div>
+
+          <button id="btnRegisterSubmit" type="submit" class="btn primary block" style="margin-top: 14px; font-size: 14px; padding: 13px;">
+            Daftar & Terbitkan Kartu Member →
+          </button>
+        </form>
+      </div>
+
+      <div style="text-align: center; margin-top: 16px; font-size: 12px; color: var(--text-muted);">
+        Sudah terdaftar? <a href="javascript:void(0)" onclick="switchAuthMode('LOGIN')" style="color: var(--accent); font-weight: 750; text-decoration: none;">Masuk ke akun</a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =========================================================
+       2. MAIN APPLICATION (AUTHENTICATED)
+       ========================================================= -->
+  <div id="mainApp" class="hidden">
+
+    <!-- Top Sticky Header -->
+    <header class="app-header">
+      <div class="brand-badge">
+        <div class="brand-logo-icon">✂</div>
+        <div>
+          <div class="brand-text-title">INPRESIVE MEMBER</div>
+          <div id="headerGreeting" class="brand-text-sub">Halo, Pelanggan Setia</div>
+        </div>
+      </div>
+      <button class="btn sm outline" onclick="confirmLogout()" style="font-size: 11px; padding: 5px 10px; border-radius: 6px;">
+        Keluar
+      </button>
+    </header>
+
+    <!-- CONTENT TABS CONTAINER -->
+    <main class="main-content">
+
+      <!-- =========================================================
+           TAB 1: BERANDA (HOME & VIRTUAL CARD)
+           ========================================================= -->
+      <section id="tabHome" class="tab-pane">
+
+        <!-- 1. VIRTUAL MEMBER CARD (PALING ATAS DENGAN QR CODE STATIS) -->
+        <div class="member-card-wrapper">
+          <div class="virtual-card">
+            <!-- Card Header -->
+            <div class="card-top-bar">
+              <div>
+                <div class="card-club-name">INPRESIVE BARBERSHOP</div>
+                <div class="card-title">MEMBER CARD</div>
+              </div>
+              <div id="cardTierBadge" class="tier-badge silver">
+                SILVER
+              </div>
+            </div>
+
+            <!-- Central High-Contrast Static QR Code Box -->
+            <div class="card-qr-box" onclick="openFullscreenQR()" title="Ketuk untuk perbesar QR">
+              <div id="memberQrContainer">
+                <!-- QR Code generated here via JS -->
+              </div>
+              <div class="qr-scan-instruction">SCAN ME DI KASIR</div>
+              <div id="cardMemberId" class="qr-member-id-tag">MBR-000000</div>
+            </div>
+
+            <!-- Card Bottom Meta -->
+            <div class="card-bottom-info">
+              <div>
+                <div id="cardMemberName" class="card-member-name">Nama Member</div>
+                <div id="cardMemberPhone" class="card-member-phone">0812-xxxx-xxxx</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 10px; color: #d6cfc5; text-transform: uppercase;">Status</div>
+                <div style="font-size: 12px; font-weight: 800; color: #4ade80;">AKTIF</div>
+              </div>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 8px; font-size: 11px; color: var(--text-muted);">
+            💡 <i>Cukup tunjukkan QR di atas ke scanner kasir saat berkunjung untuk klaim poin & diskon.</i>
+          </div>
+        </div>
+
+        <!-- 2. POINTS BALANCE & TIER PROGRESS -->
+        <div class="points-summary-card">
+          <div class="points-header">
+            <div>
+              <div class="points-label">
+                <span>⭐</span> Saldo Poin Loyalitas
+              </div>
+              <div style="display: flex; align-items: baseline; margin-top: 2px;">
+                <span id="pointsBalanceValue" class="points-value">0</span>
+                <span class="points-unit">Poin</span>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <span id="tierMultiplierBadge" class="badge" style="background: var(--accent-light); color: var(--accent); font-weight: 800; font-size: 11px; padding: 4px 8px; border-radius: 6px;">
+                1.0x Poin
+              </span>
+            </div>
+          </div>
+
+          <!-- Tier Progress Track -->
+          <div class="tier-progress-box">
+            <div class="tier-progress-labels">
+              <span id="currentTierLabel">Tier: Silver</span>
+              <span id="nextTierLabel">Menuju Gold</span>
+            </div>
+            <div class="progress-track">
+              <div id="tierProgressFill" class="progress-fill" style="width: 15%;"></div>
+            </div>
+            <div id="tierProgressHint" class="tier-hint">
+              Belanja Rp 0 / Rp 500.000 untuk naik ke Gold Tier
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. QUICK ACTIONS GRID -->
+        <div class="quick-actions-grid">
+          <div class="quick-btn" onclick="switchNavTab('history')">
+            <span class="btn-icon">📜</span>
+            <span class="btn-label">Riwayat & Review</span>
+          </div>
+          <div class="quick-btn" onclick="switchNavTab('services')">
+            <span class="btn-icon">✂️</span>
+            <span class="btn-label">Menu Layanan</span>
+          </div>
+          <div class="quick-btn" onclick="switchNavTab('profile')">
+            <span class="btn-icon">👤</span>
+            <span class="btn-label">Profil & Akun</span>
+          </div>
+        </div>
+
+        <!-- 4. INFO & BERITA INPRESIVE -->
+        <div class="section-title-wrap">
+          <div class="section-title">📰 Info & Berita Inpresive</div>
+          <span style="font-size: 11px; color: var(--text-muted);">Kabar Terkini</span>
+        </div>
+
+        <div id="homeNewsList">
+          <!-- News 1 -->
+          <div class="card-item" onclick="openNewsDetail(1)" style="cursor: pointer;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span class="badge" style="background: #fef3c7; color: #92400e; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 4px;">
+                🏢 Operasional
+              </span>
+              <span style="font-size: 11px; color: var(--text-subtle);">Terbaru</span>
+            </div>
+            <div style="font-weight: 850; font-size: 13.5px; color: var(--primary); margin-bottom: 4px;">
+              Standar Layanan & Jam Operasional Seluruh Cabang Inpresive
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted); line-height: 1.45;">
+              Seluruh cabang Inpresive Barbershop beroperasi normal setiap hari mulai pukul 10:00 – 21:00 WIB. Tunjukkan QR Member Anda saat tiba di kasir.
+            </div>
+          </div>
+
+          <!-- News 2 -->
+          <div class="card-item" onclick="openNewsDetail(2)" style="cursor: pointer;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span class="badge" style="background: #eff6ff; color: #1e40af; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 4px;">
+                ✂️ Tips Grooming
+              </span>
+              <span style="font-size: 11px; color: var(--text-subtle);">Gaya Rambut</span>
+            </div>
+            <div style="font-weight: 850; font-size: 13.5px; color: var(--primary); margin-bottom: 4px;">
+              Waktu Ideal Merapikan Rambut Agar Tetap Rapi & Segar
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted); line-height: 1.45;">
+              Para capster profesional Inpresive menyarankan waktu cukur rutin setiap 3 sampai 4 minggu sekali agar bentuk potongan fade, undercut, atau taper tetap terjaga.
+            </div>
+          </div>
+
+          <!-- News 3 -->
+          <div class="card-item" onclick="openNewsDetail(3)" style="cursor: pointer;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span class="badge" style="background: #f0fdf4; color: #166534; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 4px;">
+                ⭐ Info Member
+              </span>
+              <span style="font-size: 11px; color: var(--text-subtle);">Reward Poin</span>
+            </div>
+            <div style="font-weight: 850; font-size: 13.5px; color: var(--primary); margin-bottom: 4px;">
+              Kumpulkan Poin Loyalitas & Dapatkan Cukur Gratis
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted); line-height: 1.45;">
+              Poin yang terkumpul dari setiap transaksi dapat ditukarkan langsung di kasir untuk potongan harga hingga 100% dari total tagihan cukur Anda!
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- =========================================================
+           TAB 2: RIWAYAT TRANSAKSI & REVIEW (POINT 4 USER)
+           ========================================================= -->
+      <section id="tabHistory" class="tab-pane hidden">
+        <div class="section-title-wrap">
+          <div>
+            <div class="section-title">Riwayat Potong Rambut</div>
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+              Daftar kunjungan Anda. Beri rating dan kritik/saran langsung pada transaksi yang selesai.
+            </div>
+          </div>
+        </div>
+
+        <div id="transactionsList">
+          <!-- Dynamic transaction cards -->
+          <div style="padding: 30px; text-align: center; color: var(--text-muted); font-size: 12.5px;">
+            Memuat data transaksi...
+          </div>
+        </div>
+      </section>
+
+
+      <!-- =========================================================
+           TAB 3: LAYANAN, CABANG & PROMO (POINT 6 USER)
+           ========================================================= -->
+      <section id="tabServices" class="tab-pane hidden">
+        <!-- Sub-filter -->
+        <div style="display: flex; gap: 6px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px;">
+          <button id="catalogSubTabServices" class="btn sm primary" onclick="switchCatalogSubTab('services')">Menu Layanan</button>
+          <button id="catalogSubTabBranches" class="btn sm outline" onclick="switchCatalogSubTab('branches')">Lokasi Cabang</button>
+          <button id="catalogSubTabTiers" class="btn sm outline" onclick="switchCatalogSubTab('tiers')">Tingkat Tier</button>
+        </div>
+
+        <!-- 1. Services Subtab -->
+        <div id="subViewServices">
+          <div class="section-title" style="margin-bottom: 10px;">Daftar Layanan Inpresive</div>
+          <div id="servicesList">
+            <div style="padding: 20px; text-align: center; color: var(--text-muted);">Memuat katalog...</div>
+          </div>
+        </div>
+
+        <!-- 2. Branches Subtab -->
+        <div id="subViewBranches" class="hidden">
+          <div class="section-title" style="margin-bottom: 10px;">Cabang Inpresive Barbershop</div>
+          <div id="branchesList">
+            <div style="padding: 20px; text-align: center; color: var(--text-muted);">Memuat cabang...</div>
+          </div>
+        </div>
+
+        <!-- 3. Tiers Subtab -->
+        <div id="subViewTiers" class="hidden">
+          <div class="section-title" style="margin-bottom: 10px;">Benefit Tingkat Membership</div>
+          <div id="tiersList">
+            <div style="padding: 20px; text-align: center; color: var(--text-muted);">Memuat data tier...</div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- =========================================================
+           TAB 4: PROFIL & PENGATURAN (EDIT DATA DIRI & GANTI PASSWORD)
+           ========================================================= -->
+      <section id="tabProfile" class="tab-pane hidden">
+        <!-- Profile Header Card -->
+        <div class="card-item" style="padding: 16px; display: flex; align-items: center; gap: 14px; margin-bottom: 18px;">
+          <div id="profileAvatar" style="width: 52px; height: 52px; background: var(--bg-dark); color: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; border: 2px solid var(--accent);">
+            MB
+          </div>
+          <div style="flex: 1;">
+            <div id="profileNameDisplay" style="font-size: 16px; font-weight: 850; color: var(--primary);">Nama Member</div>
+            <div id="profileEmailDisplay" style="font-size: 12px; color: var(--text-muted);">email@member.com</div>
+            <div style="margin-top: 4px;">
+              <span id="profileTierBadge" class="tier-badge silver" style="font-size: 10px; padding: 2px 8px;">SILVER TIER</span>
+              <span id="profileIdTag" style="font-size: 11px; color: var(--text-muted); margin-left: 6px; font-family: monospace;">MBR-001</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION: EDIT DATA DIRI -->
+        <div class="card-item" style="padding: 18px; margin-bottom: 18px;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+            <span style="font-size: 18px;">📝</span>
+            <div style="font-size: 14px; font-weight: 800; color: var(--primary);">Edit Data Diri</div>
+          </div>
+
+          <form id="formEditProfile" onsubmit="handleUpdateProfile(event)">
+            <div class="form-group">
+              <label class="form-label" for="editName">Nama Lengkap *</label>
+              <input id="editName" type="text" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editPhone">Nomor WhatsApp / HP *</label>
+              <input id="editPhone" type="tel" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editBirthDate">Tanggal Lahir</label>
+              <input id="editBirthDate" type="date" class="form-input">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editCity">Kota Domisili</label>
+              <input id="editCity" type="text" class="form-input" placeholder="Contoh: Suwa / Nagano">
+            </div>
+
+            <button id="btnSaveProfile" type="submit" class="btn primary block" style="margin-top: 8px;">
+              Simpan Perubahan Data
+            </button>
+          </form>
+        </div>
+
+        <!-- SECTION: GANTI PASSWORD -->
+        <div class="card-item" style="padding: 18px; margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+            <span style="font-size: 18px;">🔒</span>
+            <div style="font-size: 14px; font-weight: 800; color: var(--primary);">Ganti Password</div>
+          </div>
+
+          <form id="formChangePassword" onsubmit="handleChangePassword(event)">
+            <div class="form-group">
+              <label class="form-label" for="pwdOld">Password Saat Ini</label>
+              <input id="pwdOld" type="password" class="form-input" placeholder="Masukkan password lama" required autocomplete="current-password">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pwdNew">Password Baru</label>
+              <input id="pwdNew" type="password" class="form-input" placeholder="Minimal 6 karakter" required minlength="6" autocomplete="new-password">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pwdConfirm">Konfirmasi Password Baru</label>
+              <input id="pwdConfirm" type="password" class="form-input" placeholder="Ketik ulang password baru" required minlength="6" autocomplete="new-password">
+            </div>
+
+            <button id="btnSavePassword" type="submit" class="btn dark block" style="margin-top: 8px;">
+              Perbarui Password
+            </button>
+          </form>
+        </div>
+
+        <!-- LOGOUT BUTTON -->
+        <button class="btn danger block" onclick="confirmLogout()" style="padding: 13px; font-size: 13.5px; font-weight: 800;">
+          🚪 Keluar dari Akun Member
+        </button>
+
+        <div style="text-align: center; margin-top: 18px; font-size: 11px; color: var(--text-subtle);">
+          Inpresive Barbershop Centralized Management &copy; 2026
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Mobile Navigation Bar -->
+    <nav class="bottom-nav">
+      <button id="navBtn-home" class="nav-item active" onclick="switchNavTab('home')">
+        <span class="nav-icon">🏠</span>
+        <span>Beranda</span>
+      </button>
+      <button id="navBtn-history" class="nav-item" onclick="switchNavTab('history')">
+        <span class="nav-icon">📜</span>
+        <span>Riwayat</span>
+      </button>
+      <button id="navBtn-services" class="nav-item" onclick="switchNavTab('services')">
+        <span class="nav-icon">✂️</span>
+        <span>Layanan</span>
+      </button>
+      <button id="navBtn-profile" class="nav-item" onclick="switchNavTab('profile')">
+        <span class="nav-icon">👤</span>
+        <span>Profil</span>
+      </button>
+    </nav>
+
+  </div>
+
+
+  <!-- =========================================================
+       MODAL 1: REVIEW & RATING TRANSAKSI (BOTTOM SHEET)
+       ========================================================= -->
+  <div id="modalReviewSheet" class="modal-overlay" onclick="handleOverlayClick(event, 'modalReviewSheet')">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div class="modal-handle"></div>
+      <div class="modal-title">⭐ Beri Rating & Review Layanan</div>
+      <div id="modalReviewTxMeta" class="modal-desc">
+        Kunjungan: 12 Des 2024 · INP01 · Capster Budi
+      </div>
+
+      <form id="formSubmitReview" onsubmit="handleSubmitReview(event)">
+        <input type="hidden" id="reviewTransactionId" value="">
+
+        <!-- Clickable 5 Stars -->
+        <div class="star-rating-box">
+          <button type="button" class="star-btn" onclick="setReviewRating(1)">★</button>
+          <button type="button" class="star-btn" onclick="setReviewRating(2)">★</button>
+          <button type="button" class="star-btn" onclick="setReviewRating(3)">★</button>
+          <button type="button" class="star-btn" onclick="setReviewRating(4)">★</button>
+          <button type="button" class="star-btn" onclick="setReviewRating(5)">★</button>
+        </div>
+
+        <div id="reviewRatingBadge" class="rating-badge-preview">
+          Ketuk bintang untuk memilih nilai kepuasan
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reviewMessage">Kritik, Saran, atau Ulasan Anda *</label>
+          <textarea id="reviewMessage" class="form-input" rows="3" placeholder="Ceritakan pengalaman potong rambut Anda (kerapian, keramahan capster, kenyamanan cabang)..." required style="resize: none;"></textarea>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 14px;">
+          <button type="button" class="btn outline" style="flex: 1;" onclick="closeReviewModal()">Batal</button>
+          <button id="btnSendReview" type="submit" class="btn primary" style="flex: 2;">Kirim Ulasan →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- =========================================================
+       MODAL 2: FULLSCREEN QR CODE (EASY SCAN AT CASHIER)
+       ========================================================= -->
+  <div id="modalFullscreenQR" class="modal-overlay" onclick="handleOverlayClick(event, 'modalFullscreenQR')">
+    <div class="modal-sheet" style="text-align: center; border-radius: var(--radius-xl);" onclick="event.stopPropagation()">
+      <div class="modal-handle"></div>
+      <div class="modal-title" style="margin-bottom: 2px;">Tunjukkan ke Kasir</div>
+      <div class="modal-desc" style="margin-bottom: 16px;">Kasir akan menembak scanner gun ke QR di bawah ini:</div>
+
+      <div style="background: #ffffff; padding: 18px; border-radius: 16px; display: inline-block; box-shadow: var(--shadow-card); border: 2px solid #e5e3dd;">
+        <div id="fullscreenQrContainer" style="display: flex; justify-content: center; align-items: center; min-height: 200px; min-width: 200px;"></div>
+        <div id="fullscreenMemberId" style="font-size: 16px; font-weight: 900; color: var(--accent); margin-top: 10px; font-family: monospace; letter-spacing: 0.08em;">
+          MBR-000000
+        </div>
+      </div>
+
+      <div id="fullscreenMemberName" style="font-size: 15px; font-weight: 800; margin-top: 12px; color: var(--primary);">
+        Nama Member
+      </div>
+
+      <button class="btn dark block" style="margin-top: 20px;" onclick="closeFullscreenQR()">
+        Tutup
+      </button>
+    </div>
+  </div>
+
+
+  <!-- =========================================================
+       MODAL 3: DETAIL INFO & BERITA (BOTTOM SHEET)
+       ========================================================= -->
+  <div id="modalNewsSheet" class="modal-overlay" onclick="handleOverlayClick(event, 'modalNewsSheet')">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div class="modal-handle"></div>
+      <div id="newsModalCategory" style="font-size: 11px; font-weight: 800; color: var(--accent); margin-bottom: 4px; text-transform: uppercase;">
+        Kategori
+      </div>
+      <div id="newsModalTitle" class="modal-title" style="margin-bottom: 10px; line-height: 1.35;">
+        Judul Berita
+      </div>
+      <div id="newsModalContent" style="font-size: 12.5px; color: var(--text-main); line-height: 1.55; margin-bottom: 20px;">
+        Konten informasi...
+      </div>
+      <button class="btn dark block" onclick="closeNewsDetail()">
+        Tutup
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastMessage" class="toast-msg">
+    <span id="toastIcon">ℹ️</span>
+    <span id="toastText">Pesan notifikasi</span>
+  </div>
+
+</div>
+
+<!-- QR Code Engine -->
+<script src="qrcode.min.js"></script>
+<!-- Mobile App Logic -->
+<script src="app.js"></script>
+
+</body>
+</html>
