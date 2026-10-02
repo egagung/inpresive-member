@@ -110,13 +110,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function initApp() {
+  // Always load latest catalog & dynamic news immediately from database
+  loadCatalog();
+
   try {
     const res = await apiRequest("/api/member/me");
     if (res.ok && res.member) {
       state.user = res.member;
       showMainApp();
       loadTransactions();
-      loadCatalog();
     } else {
       showAuthScreen();
     }
@@ -193,6 +195,32 @@ async function handleLoginSubmit(event) {
   }
 }
 
+function formatBirthDateDDMMMYYYY(dateStr) {
+  if (!dateStr) return '';
+  const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"];
+  const m = String(dateStr).match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (m) {
+    const y = m[1];
+    const mo = parseInt(m[2], 10) - 1;
+    const d = String(m[3]).padStart(2, '0');
+    return `${d}/${months[mo] || 'Jan'}/${y}`;
+  }
+  return dateStr;
+}
+
+function handleBirthDateChange(val) {
+  const preview = document.getElementById("regBirthDatePreview");
+  if (!preview) return;
+  if (!val) {
+    preview.innerHTML = 'Contoh format: <b>17/Ags/1998</b> (Wajib diisi untuk reward spesial ulang tahun Anda).';
+    preview.style.color = 'var(--text-muted)';
+    return;
+  }
+  const formatted = formatBirthDateDDMMMYYYY(val);
+  preview.innerHTML = `✓ Format Terpilih: <b style="color:var(--accent);">${formatted}</b>`;
+  preview.style.color = 'var(--accent)';
+}
+
 async function handleRegisterSubmit(event) {
   event.preventDefault();
   const name = document.getElementById("regName").value.trim();
@@ -202,6 +230,12 @@ async function handleRegisterSubmit(event) {
   const birthDate = document.getElementById("regBirthDate").value;
   const city = document.getElementById("regCity").value.trim();
   const btn = document.getElementById("btnRegisterSubmit");
+
+  if (!birthDate) {
+    showToast("Tanggal lahir wajib diisi dengan format DD/MMM/YYYY (Contoh: 17/Ags/1998)", "⚠️");
+    document.getElementById("regBirthDate").focus();
+    return;
+  }
 
   btn.disabled = true;
   btn.textContent = "Mendaftarkan & Menerbitkan ID...";
@@ -411,12 +445,19 @@ function renderHomeNews() {
   const container = document.getElementById("homeNewsList");
   if (!container) return;
 
-  const newsList = (state.catalog && Array.isArray(state.catalog.news) && state.catalog.news.length > 0)
-    ? state.catalog.news
-    : Object.keys(newsArticles).map(k => ({ id: Number(k), ...newsArticles[k], summary: newsArticles[k].content.replace(/<[^>]+>/g, '').slice(0, 140) + '...' }));
+  const newsList = (state.catalog && Array.isArray(state.catalog.news)) ? state.catalog.news : [];
+
+  if (newsList.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 24px 12px; color: var(--text-muted); font-size: 12px; background: var(--surface); border: 1px dashed var(--border); border-radius: 8px;">
+        Belum ada berita atau pengumuman saat ini.
+      </div>
+    `;
+    return;
+  }
 
   container.innerHTML = newsList.map(item => `
-    <div class="card-item" onclick="openNewsDetail(${item.id})" style="cursor: pointer;">
+    <div class="card-item" onclick="openNewsDetail(${item.id})" style="cursor: pointer; margin-bottom: 10px;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
         <span class="badge" style="background: #fef3c7; color: #92400e; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 4px;">
           ${escapeHtml(item.category || 'Info')}
@@ -434,9 +475,11 @@ function renderHomeNews() {
 }
 
 function openNewsDetail(id) {
-  let item = (state.catalog?.news || []).find(n => n.id === Number(id));
-  if (!item && newsArticles[id]) item = newsArticles[id];
-  if (!item) return;
+  const item = (state.catalog?.news || []).find(n => n.id === Number(id));
+  if (!item) {
+    showToast("Berita tidak ditemukan atau sudah dihapus.", "⚠️");
+    return;
+  }
 
   document.getElementById("newsModalCategory").textContent = item.category || "Informasi";
   document.getElementById("newsModalTitle").textContent = item.title;
@@ -640,6 +683,7 @@ async function loadCatalog() {
     if (res.ok) {
       state.catalog = res;
       renderCatalog();
+      renderHomeNews();
     }
   } catch (err) {
     console.warn("Catalog load failed:", err.message);

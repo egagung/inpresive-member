@@ -109,14 +109,16 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="regBirthDate">Tanggal Lahir (Opsional)</label>
-            <input id="regBirthDate" type="date" class="form-input">
-            <div class="form-hint">Untuk reward kejutan di hari ulang tahun Anda.</div>
+            <label class="form-label" for="regBirthDate">Tanggal Lahir * <span style="font-size:11px; color:var(--accent); font-weight:700;">(Wajib • Format: DD/MMM/YYYY)</span></label>
+            <input id="regBirthDate" type="date" class="form-input" required onchange="handleBirthDateChange(this.value)">
+            <div id="regBirthDatePreview" class="form-hint" style="color:var(--text-muted); margin-top:4px;">
+              Contoh format: <b>17/Ags/1998</b> (Wajib diisi untuk reward spesial ulang tahun Anda).
+            </div>
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="regCity">Kota Domisili (Opsional)</label>
-            <input id="regCity" type="text" class="form-input" placeholder="Contoh: Suwa / Nagano / Jakarta">
+            <label class="form-label" for="regCity">Wilayah Domisili (Opsional)</label>
+            <input id="regCity" type="text" class="form-input" placeholder="Contoh: Ciledug / Larangan / Kreo / Raden Patah">
           </div>
 
           <button id="btnRegisterSubmit" type="submit" class="btn primary block" style="margin-top: 14px; font-size: 14px; padding: 13px;">
@@ -256,52 +258,8 @@
         </div>
 
         <div id="homeNewsList">
-          <!-- News 1 -->
-          <div class="card-item" onclick="openNewsDetail(1)" style="cursor: pointer;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span class="badge" style="background: #fef3c7; color: #92400e; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 4px;">
-                🏢 Operasional
-              </span>
-              <span style="font-size: 11px; color: var(--text-subtle);">Terbaru</span>
-            </div>
-            <div style="font-weight: 850; font-size: 13.5px; color: var(--primary); margin-bottom: 4px;">
-              Standar Layanan & Jam Operasional Seluruh Cabang Inpresive
-            </div>
-            <div style="font-size: 12px; color: var(--text-muted); line-height: 1.45;">
-              Seluruh cabang Inpresive Barbershop beroperasi normal setiap hari mulai pukul 10:00 – 21:00 WIB. Tunjukkan QR Member Anda saat tiba di kasir.
-            </div>
-          </div>
-
-          <!-- News 2 -->
-          <div class="card-item" onclick="openNewsDetail(2)" style="cursor: pointer;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span class="badge" style="background: #eff6ff; color: #1e40af; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 4px;">
-                ✂️ Tips Grooming
-              </span>
-              <span style="font-size: 11px; color: var(--text-subtle);">Gaya Rambut</span>
-            </div>
-            <div style="font-weight: 850; font-size: 13.5px; color: var(--primary); margin-bottom: 4px;">
-              Waktu Ideal Merapikan Rambut Agar Tetap Rapi & Segar
-            </div>
-            <div style="font-size: 12px; color: var(--text-muted); line-height: 1.45;">
-              Para capster profesional Inpresive menyarankan waktu cukur rutin setiap 3 sampai 4 minggu sekali agar bentuk potongan fade, undercut, atau taper tetap terjaga.
-            </div>
-          </div>
-
-          <!-- News 3 -->
-          <div class="card-item" onclick="openNewsDetail(3)" style="cursor: pointer;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span class="badge" style="background: #f0fdf4; color: #166534; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 4px;">
-                ⭐ Info Member
-              </span>
-              <span style="font-size: 11px; color: var(--text-subtle);">Reward Poin</span>
-            </div>
-            <div style="font-weight: 850; font-size: 13.5px; color: var(--primary); margin-bottom: 4px;">
-              Kumpulkan Poin Loyalitas & Dapatkan Cukur Gratis
-            </div>
-            <div style="font-size: 12px; color: var(--text-muted); line-height: 1.45;">
-              Poin yang terkumpul dari setiap transaksi dapat ditukarkan langsung di kasir untuk potongan harga hingga 100% dari total tagihan cukur Anda!
-            </div>
+          <div style="text-align: center; padding: 18px 0; color: var(--text-muted); font-size: 12px;">
+            Memuat info & berita terkini...
           </div>
         </div>
       </section>
@@ -409,8 +367,8 @@
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="editCity">Kota Domisili</label>
-              <input id="editCity" type="text" class="form-input" placeholder="Contoh: Suwa / Nagano">
+              <label class="form-label" for="editCity">Wilayah Domisili (Opsional)</label>
+              <input id="editCity" type="text" class="form-input" placeholder="Contoh: Ciledug / Larangan / Kreo / Raden Patah">
             </div>
 
             <button id="btnSaveProfile" type="submit" class="btn primary block" style="margin-top: 8px;">
