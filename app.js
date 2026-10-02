@@ -727,11 +727,21 @@ function renderCatalog() {
         ? `<ul style="margin:4px 0 0 16px; padding:0; line-height:1.5;">${benefitList.map(b => `<li>${escapeHtml(b)}</li>`).join('')}</ul>`
         : `<span>${escapeHtml(t.benefits || 'Benefit eksklusif member')}</span>`;
 
+      const tierBorderColors = {
+        platinum: '#9333ea',
+        gold: '#d97706',
+        silver: '#9ca3af',
+        diamond: '#06b6d4',
+        vip: '#e11d48',
+        bronze: '#b45309'
+      };
+      const borderColor = tierBorderColors[String(t.code || '').toLowerCase()] || 'var(--accent)';
+
       return `
-        <div class="card-item" style="border-left:4px solid ${t.code === 'Platinum' ? '#9333ea' : t.code === 'Gold' ? '#d97706' : '#9ca3af'};">
+        <div class="card-item" style="border-left:4px solid ${borderColor};">
           <div class="flex-between">
             <strong style="font-size:14px;">${escapeHtml(t.name)}</strong>
-            <span class="tier-badge ${t.code.toLowerCase()}" style="font-size:10px;">${t.multiplier}x POIN</span>
+            <span class="tier-badge ${escapeHtml(String(t.code || '').toLowerCase())}" style="font-size:10px;">${t.multiplier}x POIN</span>
           </div>
           <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">
             Syarat Belanja: <b>${formatRupiah(t.minSpend)}</b>
